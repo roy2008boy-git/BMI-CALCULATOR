@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Food Tracker</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      width: 380px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    input, select, button {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .plan {
+      text-align: left;
+      margin-top: 20px;
+      background-color: #f8f8f8;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Food Tracker</h1>
+
+    <div id="formSection">
+      <input type="text" id="name" placeholder="Name" required>
+      <input type="number" id="age" placeholder="Age" required>
+      <input type="number" id="weight" placeholder="Weight (kg)" required>
+      <input type="number" id="height" placeholder="Height (cm)" required>
+      <select id="gender">
+        <option value="">Select Gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+      <button onclick="calculateBMI()">Submit</button>
+    </div>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function calculateBMI() {
+      const name = document.getElementById("name").value;
+      const age = document.getElementById("age").value;
+      const weight = parseFloat(document.getElementById("weight").value);
+      const height = parseFloat(document.getElementById("height").value) / 100; // convert to meters
+      const gender = document.getElementById("gender").value;
+
+      if (!name || !age || !weight || !height || !gender) {
+        alert("Please fill all fields!");
+        return;
+      }
+
+      const bmi = (weight / (height * height)).toFixed(2);
+      let category = "";
+      let plan = "";
+
+      if (bmi < 18.5) {
+        category = "Underweight";
+        plan = `
+        <b>High-calorie & protein-rich plan:</b><br>
+        - Breakfast: Peanut butter toast + milk<br>
+        - Lunch: Rice, chicken curry, avocado salad<br>
+        - Dinner: Pasta with cheese sauce<br>
+        - Snacks: Nuts, smoothies, yogurt
+        `;
+      } else if (bmi >= 18.5 && bmi < 24.9) {
+        category = "Normal";
+        plan = `
+        <b>Balanced diet plan:</b><br>
+        - Breakfast: Oatmeal with banana & almonds<br>
+        - Lunch: Grilled chicken, quinoa, veggies<br>
+        - Dinner: Vegetable soup + toast<br>
+        - Snacks: Fruits, green tea, yogurt
+        `;
+      } else if (bmi >= 25 && bmi < 29.9) {
+        category = "Overweight";
+        plan = `
+        <b>Light & low-carb plan:</b><br>
+        - Breakfast: Egg whites + smoothie<br>
+        - Lunch: Fish + salad + brown rice<br>
+        - Dinner: Stir-fried veggies<br>
+        - Snacks: Nuts, black coffee
+        `;
+      } else {
+        category = "Obese";
+        plan = `
+        <b>Calorie-deficit meal plan:</b><br>
+        - Breakfast: Greek yogurt + berries<br>
+        - Lunch: Grilled veggies + chicken<br>
+        - Dinner: Soup + salad<br>
+        - Snacks: Apple slices, green tea
+        `;
+      }
+
+      document.getElementById("formSection").style.display = "none";
+      document.getElementById("result").innerHTML = `
+        <h2>Hi ${name} 👋</h2>
+        <p>Your BMI is <b>${bmi}</b> (${category})</p>
+        <div class="plan">
+          <h3>Your Suggested Weekly Plan</h3>
+          ${plan}
+        </div>
+        <br>
+        <button onclick="location.reload()">Restart</button>
+      `;
+    }
+  </script>
+</body>
+</html>
